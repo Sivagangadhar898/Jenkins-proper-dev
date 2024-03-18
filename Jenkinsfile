@@ -36,12 +36,12 @@ pipeline {
                 sh 'zip -r catalogue.zip ./* --exclude=.git --exclude=.zip'
             }
         }
-        stage('SAST') {
-            steps {
-                echo "SAST Done"
-                echo "package version: $packageVersion"
-            }
-        }
+        // stage('SAST') {
+        //     steps {
+        //         echo "SAST Done"
+        //         echo "package version: $packageVersion"
+        //     }
+        // }
         //install pipeline utility steps plugin, if not installed
         stage('Publish Artifact') {
             steps {
@@ -65,22 +65,22 @@ pipeline {
 
         //here I need to configure downstram job. I have to pass package version for deployment
         // This job will wait until downstrem job is over
-        stage('Deploy') {
-            steps {
-                script{
-                    echo "Deployment"
-                    def params = [
-                        string(name: 'version', value: "$packageVersion")
-                    ]
-                    build job: "../catalogue-deploy", wait: true, parameters: params
-                }
-            }
+    //     stage('Deploy') {
+    //         steps {
+    //             script{
+    //                 echo "Deployment"
+    //                 def params = [
+    //                     string(name: 'version', value: "$packageVersion")
+    //                 ]
+    //                 build job: "../catalogue-deploy", wait: true, parameters: params
+    //             }
+    //         }
+    //     }
         }
-    }
 
-       post{
-        always{
-          echo 'cleaning up workspace'
+        post{
+         always{
+            echo 'cleaning up workspace'
                //deleteDir()
        }
     }
